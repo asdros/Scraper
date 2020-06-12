@@ -17,6 +17,7 @@ namespace Scraper.Models
         public string RainFall { get; set; }
         public string MoonPhase { get; set; }
         public string FishingQuality { get; set; }
+        public string City { get; set; }
 
     }
 }

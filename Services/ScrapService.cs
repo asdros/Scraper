@@ -47,7 +47,7 @@ namespace Scraper.Services
                  var query = conn.Query<ScrapItem>(_commandText.AddItem,
                      new { Date = item.Date, Sunrise = item.Sunrise, Sunset = item.Sunset, TempDay = item.TempDay, 
                          TempNight = item.TempNight, Pressure = item.Pressure, RainFall = item.RainFall, 
-                         MoonPhase = item.MoonPhase, FishingQuality = item.FishingQuality });
+                         MoonPhase = item.MoonPhase, FishingQuality = item.FishingQuality,City=item.City });
  
              });
         }
