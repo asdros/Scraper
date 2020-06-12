@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Scraper.Services.Queries
 {
-    interface ICommandText
+     public interface ICommandText
     {
         string AddItem { get; }
         string GetItems { get; }
@@ -13,6 +13,6 @@ namespace Scraper.Services.Queries
         string GetItemsByDay { get; }
         string GetItemsByHigherTemp { get; }
         string GetItemsByLowerTemp { get; }
-        
+        string DropRows { get; }
     }
 }

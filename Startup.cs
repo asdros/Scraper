@@ -8,8 +8,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Scraper.Services;
+using Scraper.Services.ExecuteCommands;
+using Scraper.Services.Queries;
 
 namespace Scraper
 {
@@ -25,7 +29,13 @@ namespace Scraper
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IExecuters, Executers>();
+            services.AddTransient<ICommandText, CommandText>();
+            services.AddTransient<IScrapService, ScrapService>();
+            services.AddMvc();
+
             services.AddControllers();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,10 +52,12 @@ namespace Scraper
 
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }
