@@ -27,7 +27,7 @@ namespace Scraper.Controllers
 		public ActionResult GetAll()
 		{
 			var items = _scrapService.GetItems();
-			return Ok(items);
+			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
 
 		[HttpPost("{city}")]
@@ -92,7 +92,7 @@ namespace Scraper.Controllers
 				j++;
 			}
 			
-			return NoContent();
+			return Ok("DONE");
 
 		}
 
@@ -100,7 +100,21 @@ namespace Scraper.Controllers
 		public ActionResult ClearDB()
 		{
 			_scrapService.DropRows();
-			return NoContent();
+			return Ok("DONE");
+		}
+
+		[HttpGet("hightemp/{temp}")]
+		public ActionResult GetItemsByHigherTemp(int temp)
+		{
+			var items = _scrapService.GetItemsByHigherTemp(temp);
+			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
+		}
+
+		[HttpGet("byday/{number}")]
+		public ActionResult GetItemsByDay(byte number)
+		{
+			var items = _scrapService.GetItemsByDay(number);
+			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
 	}
 }

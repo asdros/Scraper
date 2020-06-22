@@ -52,6 +52,19 @@ namespace Scraper.Services
              });
         }
 
+        public  List<ScrapItem> GetItemsByHigherTemp(int temp)
+        {
+            var query = _executers.ExecuteCommand(_connStr,
+                conn => conn.Query<ScrapItem>(_commandText.GetItemsByHigherTemp, new { @TempValue = temp })).ToList();
+            return query;
+        }
+
+        public List<ScrapItem> GetItemsByDay(byte dayNumber)
+        {
+            var query = _executers.ExecuteCommand(_connStr,
+                conn => conn.Query<ScrapItem>(_commandText.GetItemsByDay, new { @DayNumber = dayNumber })).ToList();
+            return query;
+        }
 
     }
 

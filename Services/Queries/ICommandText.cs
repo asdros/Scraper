@@ -9,10 +9,10 @@ namespace Scraper.Services.Queries
     {
         string AddItem { get; }
         string GetItems { get; }
-        string GetItemsByCity { get; }
+        //string GetItemsByCity { get; }
         string GetItemsByDay { get; }
         string GetItemsByHigherTemp { get; }
-        string GetItemsByLowerTemp { get; }
+        //string GetItemsByLowerTemp { get; }
         string DropRows { get; }
     }
 }
