@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Scraper.Services;
 using Scraper.Services.ExecuteCommands;
 using Scraper.Services.Queries;
+using Scraper.Auth;
 
 namespace Scraper
 {
@@ -33,9 +35,13 @@ namespace Scraper
             services.AddTransient<ICommandText, CommandText>();
             services.AddTransient<IScrapService, ScrapService>();
             services.AddMvc();
-
             services.AddControllers();
-            
+
+
+            services.AddAuthentication("BasicAuthentication")
+                .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+            services.AddScoped<IUserService, UserService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,8 +56,8 @@ namespace Scraper
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.UseEndpoints(endpoints =>
             {

@@ -9,9 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Scraper.Controllers
 {
+
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class ScrapController : ControllerBase
@@ -109,7 +112,7 @@ namespace Scraper.Controllers
 			var items = _scrapService.GetItemsByHigherTemp(temp);
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
-
+		[AllowAnonymous]
 		[HttpGet("byday/{number}")]
 		public ActionResult GetItemsByDay(byte number)
 		{
