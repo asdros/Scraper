@@ -25,7 +25,9 @@ namespace Scraper.Controllers
 		{
 			_scrapService = scrapService;
 		}
-
+		/// <summary>
+		/// Wyświetlanie z bazy danych wszystkich wyników.
+		/// </summary>
 		[HttpGet]
 		public ActionResult GetAll()
 		{
@@ -33,6 +35,29 @@ namespace Scraper.Controllers
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
 
+		/// <summary>
+		/// Scrapowanie danych z zasobu internetowego i przekazywanie ich do zapisania w bazie danych.
+		/// </summary>
+		/// <remarks>
+		/// Sample request:
+		/// 
+		///			POST 
+		///         { 
+		///         
+		///             "Id":10,
+		///             "Date":"1 lipca 2020",
+		///             "Sunrise":"4:31",
+		///             "Sunset":"21:22",
+		///             "TempDay":"28°C",
+		///             "TempNight":"17°C",
+		///             "Pressure":"1007hPa",
+		///             "RainFall":"16mm",
+		///             "MoonPhase":"po I kwadrze",
+		///             "FishingQuality":"doskonale",
+		///             "City":"pila"
+		///         
+		///         }
+		///</remarks>
 		[HttpPost("{city}")]
 		public ActionResult AddItem(string city)
 		{
@@ -98,7 +123,9 @@ namespace Scraper.Controllers
 			return Ok("DONE");
 
 		}
-
+		/// <summary>
+		/// Usuwanie z tabeli wszystkich rekordów.
+		/// </summary>
 		[HttpDelete]
 		public ActionResult ClearDB()
 		{
@@ -106,12 +133,18 @@ namespace Scraper.Controllers
 			return Ok("DONE");
 		}
 
+		/// <summary>
+		/// Filtrowanie wyników uwzględniając dolną granicę zakresu temperatur i sortowanie malejące.
+		/// </summary>
 		[HttpGet("hightemp/{temp}")]
 		public ActionResult GetItemsByHigherTemp(int temp)
 		{
 			var items = _scrapService.GetItemsByHigherTemp(temp);
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
+		/// <summary>
+		/// Filtrowanie wyników uwzględniając numer dnia.
+		/// </summary>
 		[AllowAnonymous]
 		[HttpGet("byday/{number}")]
 		public ActionResult GetItemsByDay(byte number)
