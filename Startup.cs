@@ -9,7 +9,6 @@ using Scraper.Services.ExecuteCommands;
 using Scraper.Services.Queries;
 using Scraper.Auth;
 using Microsoft.OpenApi.Models;
-
 using System;
 using System.Reflection;
 using System.IO;
@@ -39,13 +38,9 @@ namespace Scraper
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
             services.AddScoped<IUserService, UserService>();
 
-
-           
-
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
-               
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Scraper WSINF",
@@ -53,8 +48,7 @@ namespace Scraper
                     Contact = new OpenApiContact
                     {
                         Name = "Szymon.",
-                    },
-                   
+                    }, 
                 });
 
                 c.AddSecurityDefinition("basic", new OpenApiSecurityScheme
@@ -84,7 +78,6 @@ namespace Scraper
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,8 +101,6 @@ namespace Scraper
                 c.RoutePrefix = string.Empty;
 
             });
-
-
 
             app.UseEndpoints(endpoints =>
             {

@@ -5,20 +5,20 @@ namespace Scraper.Services.ExecuteCommands
 {
     public class Executers :IExecuters
     {
-        public void ExecuteCommand(string connStr, Action<SqlConnection> task)
+        public void ExecuteCommand(string connectionString, Action<SqlConnection> task)
         {
-            using (var conn = new SqlConnection(connStr))
+            using (var connection = new SqlConnection(connectionString))
             {
-                conn.Open();
-                task(conn);
+                connection.Open();
+                task(connection);
             }
         }
-        public T ExecuteCommand<T>(string connStr, Func<SqlConnection, T> task)
+        public T ExecuteCommand<T>(string connectionString, Func<SqlConnection, T> task)
         {
-            using (var conn = new SqlConnection(connStr))
+            using (var connection = new SqlConnection(connectionString))
             {
-                conn.Open();
-                return task(conn);
+                connection.Open();
+                return task(connection);
             }
         }
     }

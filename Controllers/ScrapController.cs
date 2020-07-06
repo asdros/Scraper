@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Scraper.Models;
+﻿using Scraper.Models;
 using Scraper.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
 using HtmlAgilityPack;
@@ -61,38 +56,40 @@ namespace Scraper.Controllers
 		[HttpPost("{city}")]
 		public ActionResult AddItem(string city)
 		{
+		
 			var html = $@"https://www.ekologia.pl/pogoda/polska/{city}/dla-wedkarzy,15-dni";
-			HtmlWeb web = new HtmlWeb();
+			var web = new HtmlWeb();
 
-			var htmlDoc = web.Load(html);
+			var htmlDocument = web.Load(html);
 
-			// var path = @"C:\Users\Szymon\source\repos\ConsoleApp1\website.html";
-			// var htmlDoc = new HtmlDocument();
-			// htmlDoc.Load(path);
+			var evenHTMLTag = 1;              //the data of one object to be scraped is in two different parent html tags. Supervises the loop and sends data to the database every second pass
 
-			int j = 1;
-			string date, sunrise, sunset, tempDay, tempNight, pressure, rainFall, moonPhase, fishingQuality;
-			date = sunrise = sunset = tempDay = tempNight = pressure = rainFall = moonPhase = fishingQuality = string.Empty;
-
+			var date = string.Empty;
+			var sunrise = string.Empty;
+			var sunset = string.Empty;
+			var tempDay = string.Empty;
+			var tempNight = string.Empty;
+			var pressure = string.Empty;
+			var rainFall = string.Empty;
+			var moonPhase = string.Empty;
+			var fishingQuality = string.Empty;
 
 			bool first = true;
 
-			var elements = htmlDoc.DocumentNode.SelectNodes("//div[@class='day-info' or @class='dzien  odd' or @class='dzien  even']");
+			var elements = htmlDocument.DocumentNode.SelectNodes("//div[@class='day-info' or @class='dzien  odd' or @class='dzien  even']");
 			foreach (var element in elements)
 			{
-
 				if (first)              //skipping the first one empty instance of 'day-info' element
 				{
 					first = false;
 					continue;
 				}
 
-				if (j % 2 != 0)
+				if (evenHTMLTag % 2 != 0)
 				{
 					date = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='today']/b").InnerText);
 					sunrise = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='sunrise sprite']/b").InnerText);
 					sunset = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='sunset sprite']/b").InnerText);
-
 				}
 				else
 				{
@@ -103,31 +100,18 @@ namespace Scraper.Controllers
 					moonPhase = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='faza-ksiezyca sprite']/b").InnerText);
 					fishingQuality = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='brania-opis']").InnerText);
 
-					_scrapService.AddItem(new ScrapItem
-					{
-						Date = date,
-						Sunrise = sunrise,
-						Sunset = sunset,
-						TempDay = tempDay,
-						TempNight = tempNight,
-						Pressure = pressure,
-						RainFall = rainFall,
-						MoonPhase = moonPhase,
-						FishingQuality = fishingQuality,
-						City = city
-					});
+					_scrapService.AddItem(new ScrapItem{});
 				}
-				j++;
+				evenHTMLTag++;
 			}
-			
 			return Ok("DONE");
-
 		}
+
 		/// <summary>
 		/// Usuwanie z tabeli wszystkich rekordów.
 		/// </summary>
 		[HttpDelete]
-		public ActionResult ClearDB()
+		public ActionResult ClearDataBase()
 		{
 			_scrapService.DropRows();
 			return Ok("DONE");
@@ -142,6 +126,7 @@ namespace Scraper.Controllers
 			var items = _scrapService.GetItemsByHigherTemp(temp);
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
+
 		/// <summary>
 		/// Filtrowanie wyników uwzględniając numer dnia.
 		/// </summary>

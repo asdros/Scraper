@@ -14,7 +14,4 @@ Used technologies:
 
 
 
-
-
-
-For proper operation it is required to execute the script.sql in DBMS.
+For proper operation it is required to execute the script.sql in DBMS and change the "DefaultConnection" string in appsettings.json.

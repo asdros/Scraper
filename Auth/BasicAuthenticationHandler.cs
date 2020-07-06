@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Net.Http.Headers;
@@ -11,7 +10,6 @@ using Microsoft.Extensions.Options;
 
 namespace Scraper.Auth
 {
-    
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
         private IUserService _userService;

@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Scraper.Auth
 {
@@ -9,7 +7,7 @@ namespace Scraper.Auth
     {
         private List<User> _users = new List<User>
         {
-#warning public user data
+    #warning public user data
         new User {Username = "administrator", Password = "wsinf" }
         };
 
