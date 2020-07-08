@@ -12,13 +12,13 @@ namespace Scraper.Auth
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private IUserService _userService;
+        private UserService _userService;
 
         public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
                                           ILoggerFactory logger,
                                           UrlEncoder encoder,
                                           ISystemClock clock,
-                                          IUserService userService)
+                                          UserService userService)
             : base(options, logger, encoder, clock)
         {
             _userService = userService;

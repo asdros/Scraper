@@ -5,10 +5,10 @@ namespace Scraper.Services
 {
     public interface IScrapService
     {
-        void AddItem(ScrapItem item);
+        void AddItem(List<ScrapItem> items);
         void DropRows();
-        List<ScrapItem> GetItems();
-        List<ScrapItem> GetItemsByHigherTemp(int temp);
+        List<ScrapItem> GetAllItems();
+        List<ScrapItem> GetItemsAboveTheLowerTempRange(int temp);
         List<ScrapItem> GetItemsByDay(byte day);
     }
 }

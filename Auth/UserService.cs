@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Scraper.Auth
 {
-    public class UserService : IUserService
+    public class UserService
     {
         private List<User> _users = new List<User>
         {

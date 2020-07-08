@@ -5,6 +5,8 @@ using System.Web;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
 
 namespace Scraper.Controllers
 {
@@ -15,18 +17,32 @@ namespace Scraper.Controllers
 	public class ScrapController : ControllerBase
 	{
 		private readonly IScrapService _scrapService;
+		private readonly ScraperLogicService _scraperLogicService;
 
-		public ScrapController(IScrapService scrapService)
+		public ScrapController(IScrapService scrapService, ScraperLogicService scraperLogicService)
 		{
 			_scrapService = scrapService;
+			_scraperLogicService = scraperLogicService;
+
 		}
+
+		
+
 		/// <summary>
 		/// Wyświetlanie z bazy danych wszystkich wyników.
 		/// </summary>
 		[HttpGet]
 		public ActionResult GetAll()
 		{
-			var items = _scrapService.GetItems();
+			List<ScrapItem> items=new List<ScrapItem> { };
+			try
+			{
+				 items = _scrapService.GetAllItems();
+			}
+			catch
+			{
+				return Content("Error connecting to database");
+			}
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
 
@@ -55,55 +71,8 @@ namespace Scraper.Controllers
 		///</remarks>
 		[HttpPost("{city}")]
 		public ActionResult AddItem(string city)
-		{
-		
-			var html = $@"https://www.ekologia.pl/pogoda/polska/{city}/dla-wedkarzy,15-dni";
-			var web = new HtmlWeb();
-
-			var htmlDocument = web.Load(html);
-
-			var evenHTMLTag = 1;              //the data of one object to be scraped is in two different parent html tags. Supervises the loop and sends data to the database every second pass
-
-			var date = string.Empty;
-			var sunrise = string.Empty;
-			var sunset = string.Empty;
-			var tempDay = string.Empty;
-			var tempNight = string.Empty;
-			var pressure = string.Empty;
-			var rainFall = string.Empty;
-			var moonPhase = string.Empty;
-			var fishingQuality = string.Empty;
-
-			bool first = true;
-
-			var elements = htmlDocument.DocumentNode.SelectNodes("//div[@class='day-info' or @class='dzien  odd' or @class='dzien  even']");
-			foreach (var element in elements)
-			{
-				if (first)              //skipping the first one empty instance of 'day-info' element
-				{
-					first = false;
-					continue;
-				}
-
-				if (evenHTMLTag % 2 != 0)
-				{
-					date = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='today']/b").InnerText);
-					sunrise = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='sunrise sprite']/b").InnerText);
-					sunset = HttpUtility.HtmlDecode(element.SelectSingleNode(".//span[@class='sunset sprite']/b").InnerText);
-				}
-				else
-				{
-					tempDay = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='t-dzien']").InnerText);
-					tempNight = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='t-noc']").InnerText);
-					pressure = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='cisnienie-atmosferyczne sprite']").InnerText);
-					rainFall = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='opady sprite']").InnerText);
-					moonPhase = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='faza-ksiezyca sprite']/b").InnerText);
-					fishingQuality = HttpUtility.HtmlDecode(element.SelectSingleNode(".//div[@class='brania-opis']").InnerText);
-
-					_scrapService.AddItem(new ScrapItem{});
-				}
-				evenHTMLTag++;
-			}
+		{	
+			_scrapService.AddItem(_scraperLogicService.ScrapWebContent(city));
 			return Ok("DONE");
 		}
 
@@ -113,7 +82,14 @@ namespace Scraper.Controllers
 		[HttpDelete]
 		public ActionResult ClearDataBase()
 		{
-			_scrapService.DropRows();
+			try
+			{
+				_scrapService.DropRows();
+			}
+			catch
+			{
+				return Content("Error connecting to database");
+			}
 			return Ok("DONE");
 		}
 
@@ -121,10 +97,16 @@ namespace Scraper.Controllers
 		/// Filtrowanie wyników uwzględniając dolną granicę zakresu temperatur i sortowanie malejące.
 		/// </summary>
 		[HttpGet("hightemp/{temp}")]
-		public ActionResult GetItemsByHigherTemp(int temp)
+		public ActionResult GetItemsAboveTheLowerTempRange(string temp)
 		{
-			var items = _scrapService.GetItemsByHigherTemp(temp);
+			bool success = Int32.TryParse(temp, out int result);
+			if (!success)
+			{
+				return StatusCode(422,$"The value \"{temp}\" is not correct!");
+			}
+			var items = _scrapService.GetItemsAboveTheLowerTempRange(result);
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
+
 		}
 
 		/// <summary>
@@ -132,9 +114,14 @@ namespace Scraper.Controllers
 		/// </summary>
 		[AllowAnonymous]
 		[HttpGet("byday/{number}")]
-		public ActionResult GetItemsByDay(byte number)
+		public ActionResult GetItemsByDay(string number)
 		{
-			var items = _scrapService.GetItemsByDay(number);
+			bool success = Byte.TryParse(number, out byte result);
+			if (!success)
+			{
+				return StatusCode(422, $"The value \"{number}\" is not correct!");
+			}
+			var items = _scrapService.GetItemsByDay(result);
 			return Ok(JsonConvert.SerializeObject(items, Formatting.Indented));
 		}
 	}

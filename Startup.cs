@@ -28,15 +28,15 @@ namespace Scraper
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IExecuters, Executers>();
-            services.AddTransient<ICommandText, CommandText>();
+            services.AddTransient< CommandText>();
             services.AddTransient<IScrapService, ScrapService>();
+            services.AddTransient<ScraperLogicService>();
             services.AddMvc();
             services.AddControllers();
 
-
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped< UserService>();
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
@@ -87,9 +87,9 @@ namespace Scraper
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseSwagger();
             app.UseHttpsRedirection();
-
             app.UseRouting();
 
             app.UseAuthentication();
