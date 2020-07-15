@@ -25,9 +25,6 @@ namespace Scraper.Controllers
 			_scraperLogicService = scraperLogicService;
 
 		}
-
-		
-
 		/// <summary>
 		/// Wyświetlanie z bazy danych wszystkich wyników.
 		/// </summary>

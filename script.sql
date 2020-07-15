@@ -1,22 +1,19 @@
-﻿USE [webScraper]
-GO
-/****** Object:  Table [dbo].[ScrapItem]    Script Date: 26.06.2020 00:54:36 ******/
-SET ANSI_NULLS ON
+﻿SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE TABLE [dbo].[ScrapItem](
-	[Id] [tinyint] IDENTITY(1,1) NOT NULL,
-	[Date] [varchar](20) NOT NULL,
-	[Sunrise] [varchar](10) NOT NULL,
-	[Sunset] [varchar](10) NOT NULL,
-	[TempDay] [varchar](10) NOT NULL,
-	[TempNight] [varchar](10) NOT NULL,
-	[Pressure] [varchar](10) NOT NULL,
-	[RainFall] [varchar](10) NOT NULL,
-	[MoonPhase] [varchar](20) NOT NULL,
-	[FishingQuality] [varchar](20) NOT NULL,
-	[City] [varchar](30) NULL,
+CREATE TABLE [dbo].[ScrapItem] (
+    [Id]             TINYINT      IDENTITY (1, 1) NOT NULL,
+    [Date]           VARCHAR (20) NOT NULL,
+    [Sunrise]        VARCHAR (10) NOT NULL,
+    [Sunset]         VARCHAR (10) NOT NULL,
+    [TempDay]        TINYINT      NOT NULL,
+    [TempNight]      TINYINT      NOT NULL,
+    [Pressure]       FLOAT		  NOT NULL,
+    [RainFall]       SMALLINT	  NOT NULL,
+    [MoonPhase]      VARCHAR (20) NOT NULL,
+    [FishingQuality] VARCHAR (20) NOT NULL,
+    [City]           VARCHAR (30) NULL,
  CONSTRAINT [PK_ScrapItem] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
