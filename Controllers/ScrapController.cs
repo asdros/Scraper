@@ -26,7 +26,7 @@ namespace Scraper.Controllers
 
 		}
 		/// <summary>
-		/// Wyświetlanie z bazy danych wszystkich wyników.
+		/// Displaying all results from the database.
 		/// </summary>
 		[HttpGet]
 		public ActionResult GetAll()
@@ -44,7 +44,7 @@ namespace Scraper.Controllers
 		}
 
 		/// <summary>
-		/// Scrapowanie danych z zasobu internetowego i przekazywanie ich do zapisania w bazie danych.
+		/// Scraping data from an Internet resource and sending it to be saved in a database.
 		/// </summary>
 		/// <remarks>
 		/// Sample request:
@@ -74,7 +74,7 @@ namespace Scraper.Controllers
 		}
 
 		/// <summary>
-		/// Usuwanie z tabeli wszystkich rekordów.
+		/// Delete all records from the table.
 		/// </summary>
 		[HttpDelete]
 		public ActionResult ClearDataBase()
@@ -91,7 +91,7 @@ namespace Scraper.Controllers
 		}
 
 		/// <summary>
-		/// Filtrowanie wyników uwzględniając dolną granicę zakresu temperatur i sortowanie malejące.
+		/// Filtering results taking into account the lower limit of the temperature range and descending sorting.
 		/// </summary>
 		[HttpGet("hightemp/{temp}")]
 		public ActionResult GetItemsAboveTheLowerTempRange(string temp)
@@ -107,7 +107,7 @@ namespace Scraper.Controllers
 		}
 
 		/// <summary>
-		/// Filtrowanie wyników uwzględniając numer dnia.
+		/// Filtering results by day number.
 		/// </summary>
 		[AllowAnonymous]
 		[HttpGet("byday/{number}")]

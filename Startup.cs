@@ -43,8 +43,8 @@ namespace Scraper
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Scraper WSINF",
-                    Description = "Scraper Api serwisu z pogod¹ dla wêdkarzy",
+                    Title = "Weather Web Scrape",
+                    Description = "Weather Web Api Scrape for fishermans",
                     Contact = new OpenApiContact
                     {
                         Name = "Szymon.",
@@ -57,7 +57,7 @@ namespace Scraper
                     Type = SecuritySchemeType.Http,
                     Scheme = "basic",
                     In = ParameterLocation.Header,
-                    Description = "Autoryzacja dostêpu do api.      Dane logowania!            administrator:wsinf"
+                    Description = "<h1>Login:Password</br>administrator:1234</h1>"
                 });
 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
