@@ -12,6 +12,11 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Reflection;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
+using System.Threading.Tasks;
 
 namespace Scraper
 {
@@ -29,14 +34,18 @@ namespace Scraper
         {
             services.AddTransient<IExecuters, Executers>();
             services.AddTransient< CommandText>();
+            services.AddTransient<IdentityCommands>();
             services.AddTransient<IScrapService, ScrapService>();
             services.AddTransient<ScraperLogicService>();
             services.AddMvc();
             services.AddControllers();
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddAuthentication("BasicAuthentication")
                 .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
-            services.AddScoped< UserService>();
+
+            services.AddScoped<UserService>();
+
 
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
