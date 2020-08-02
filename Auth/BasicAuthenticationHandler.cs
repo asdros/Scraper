@@ -7,12 +7,13 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Scraper.Models;
 
 namespace Scraper.Auth
 {
     public class BasicAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
     {
-        private UserService _userService;
+        private readonly UserService _userService;
 
         public BasicAuthenticationHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
                                           ILoggerFactory logger,
@@ -29,7 +30,7 @@ namespace Scraper.Auth
             if (!Request.Headers.ContainsKey("Authorization"))
                 return AuthenticateResult.Fail("Missing Authorization Header");
 
-            User user = null;
+            dynamic user = null;
             try
             {
                 var authHeader = AuthenticationHeaderValue.Parse(Request.Headers["Authorization"]);
@@ -48,7 +49,7 @@ namespace Scraper.Auth
                 return AuthenticateResult.Fail("Invalid Username or Password");
 
             var claims = new[] {
-                new Claim(ClaimTypes.NameIdentifier, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.UserName),
             };
 
             var identity = new ClaimsIdentity(claims, Scheme.Name);

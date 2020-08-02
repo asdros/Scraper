@@ -1,6 +1,7 @@
-﻿namespace Scraper.Auth
+﻿
+namespace Scraper.Models
 {
-    public class User
+    public class ApplicationUser
     {
         public string Username { get; set; }
         public string Password { get; set; }
