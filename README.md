@@ -10,9 +10,5 @@ Used technologies:
 - HtmlAgilityPack
 
 
-DEMO: 
-http://scrap-wsinf.somee.com/
-
-
 
 For proper operation it is required to execute the script.sql in DBMS and change the "DefaultConnection" string in appsettings.json.
